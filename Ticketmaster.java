@@ -313,14 +313,153 @@ public class Ticketmaster{
 	}//end readChoice
 	
 	public static void AddUser(Ticketmaster esql){//1
+		String firstname;
+		// returns only if a correct value is given.
+		do {
+			System.out.print("Input firstname: ");
+			try {
+				firstname = Integer.parseInt(in.readLine());
+				break;
+			}catch (Exception e) {
+				System.out.println("Your input is invalid!");
+				continue;
+			}//end try
+		}while (true);
+
+		String lastname;
+		// returns only if a correct value is given.
+		do {
+			System.out.print("Input lastname: ");
+			try {
+				lastname = Integer.parseInt(in.readLine());
+				break;
+			}catch (Exception e) {
+				System.out.println("Your input is invalid!");
+				continue;
+			}//end try
+		}while (true);
+
+		String email;
+		// returns only if a correct value is given.
+		do {
+			System.out.print("Input email address: ");
+			try {
+				email = Integer.parseInt(in.readLine());
+				//check for validity @ .com .edu org ???
+				break;
+			}catch (Exception e) {
+				System.out.println("Your input is invalid!");
+				continue;
+			}//end try
+		}while (true);
+
+		int phone;
+		// returns only if a correct value is given.
+		do {
+			System.out.print("Input phone number: ");
+			try {
+				phone = Integer.parseInt(in.readLine());
+				//check for validity all numbers 10 digits or more
+				break;
+			}catch (Exception e) {
+				System.out.println("Your input is invalid!");
+				continue;
+			}//end try
+		}while (true);
 		
+		try {
+			//idk how to do this part
+			String query = "INSERT INTO Users (fname, lname, email, phone) VALUES (" + firstname + ", '" + lastname + "', '" + email + "', " + phone + ");";
+			esql.executeUpdate(query);
+		} catch (Exception e) {
+			//some error message idk
+		}
 	}
 	
 	public static void AddBooking(Ticketmaster esql){//2
+		String status;
+		// returns only if a correct value is given.
+		do {
+			System.out.print("Input status: ");
+			try {
+				status = Integer.parseInt(in.readLine());
+				//check for validity status
+				break;
+			}catch (Exception e) {
+				System.out.println("Your input is invalid!");
+				continue;
+			}//end try
+		}while (true);
+		
+		String dateTime;
+		// returns only if a correct value is given.
+		do {
+			System.out.print("Input booking date and time (YYY-MM-DD hh:mm): ");
+			try {
+				//not too sure how to do this???
+				dateTime = Integer.parseInt(in.readLine());
+				//check for validity
+				break;
+			}catch (Exception e) {
+				System.out.println("Your input is invalid!");
+				continue;
+			}//end try
+		}while (true);
+		
+		
+		//then update query...???
+		
 		
 	}
 	
 	public static void AddMovieShowingToTheater(Ticketmaster esql){//3
+		String title;
+		// returns only if a correct value is given.
+		do {
+			System.out.print("Input title of movie: ");
+			try {
+				title = Integer.parseInt(in.readLine());
+				//check for validity
+				break;
+			}catch (Exception e) {
+				System.out.println("Your input is invalid!");
+				continue;
+			}//end try
+		}while (true);
+		
+		int duration;
+		// returns only if a correct value is given.
+		do {
+			System.out.print("Input duration of movie (in seconds): ");
+			try {
+				duration = Integer.parseInt(in.readLine());
+				//check for validity
+				break;
+			}catch (Exception e) {
+				System.out.println("Your input is invalid!");
+				continue;
+			}//end try
+		}while (true);
+		
+		
+		int startTime;
+		// returns only if a correct value is given.
+		do {
+			//idk what TIME type is in sql...???
+			System.out.print("Input startTime of movie (TIME): ");
+			try {
+				startTime = Integer.parseInt(in.readLine());
+				//startTime for validity
+				break;
+			}catch (Exception e) {
+				System.out.println("Your input is invalid!");
+				continue;
+			}//end try
+		}while (true);
+		
+		
+		//then update query...???
+		
 		
 	}
 	
