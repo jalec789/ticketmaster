@@ -407,15 +407,14 @@ public class Ticketmaster{
 		String password;
 		password = getString("Input password: ");
 		password = hashPassword(password);
-
-		String query;
+		System.out.println("Hash is " + password);
+		String query = String.format("INSERT INTO Users (fname, lname, email, phone, pwd) VALUES ('%s' , '%s' , '%s' , %d , '%s')", firstname, lastname, email, phone, password);
+		System.out.println("query string: " + query);
 		try {
-			//idk how to do this part
-			query = String.format("INSERT INTO Users (fname, lname, email, phone, pwd) VALUES ('%s' , '%s' , '%s' , %d , '%s')");
 			esql.executeUpdate(query);
-			//System.out.println(query);	//DEBUG
 		} catch (Exception e) {
 			//some error message idk
+			System.out.println("Did not update DB");
 		}
 	}
 	
