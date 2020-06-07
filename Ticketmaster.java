@@ -311,61 +311,53 @@ public class Ticketmaster{
 		}while (true);
 		return input;
 	}//end readChoice
+
+	public static String getString(String prompt) {
+		String input;
+		do {
+			System.out.println(prompt);
+			try {
+				input = in.readLine();
+				//if statement here if needed...
+				break;
+			} catch (Exception e) {
+				System.out.println("Your input is invalid!");
+				continue;
+			}
+		} while (true);
+		return input;
+	}
+
+	//idk what kind of ranges we should have
+	public static int getInt(String prompt){
+		int input;
+		do {
+			System.out.print(prompt);
+			try {
+				input = Integer.parseInt(in.readLine());
+				//if statement here if needed...
+				break;
+			}
+			catch (Exception e) {
+				System.out.println("Your input is invalid!");
+				continue;
+			}
+		} while (true);
+		return input;
+	}
 	
 	public static void AddUser(Ticketmaster esql){//1
 		String firstname;
-		// returns only if a correct value is given.
-		do {
-			System.out.print("Input firstname: ");
-			try {
-				firstname = Integer.parseInt(in.readLine());
-				break;
-			}catch (Exception e) {
-				System.out.println("Your input is invalid!");
-				continue;
-			}//end try
-		}while (true);
+		firstname = getString("Input firstname: ");
 
 		String lastname;
-		// returns only if a correct value is given.
-		do {
-			System.out.print("Input lastname: ");
-			try {
-				lastname = Integer.parseInt(in.readLine());
-				break;
-			}catch (Exception e) {
-				System.out.println("Your input is invalid!");
-				continue;
-			}//end try
-		}while (true);
+		lastname = getString("Input lastname: ");
 
 		String email;
-		// returns only if a correct value is given.
-		do {
-			System.out.print("Input email address: ");
-			try {
-				email = Integer.parseInt(in.readLine());
-				//check for validity @ .com .edu org ???
-				break;
-			}catch (Exception e) {
-				System.out.println("Your input is invalid!");
-				continue;
-			}//end try
-		}while (true);
+		email = getString("Input email");
 
 		int phone;
-		// returns only if a correct value is given.
-		do {
-			System.out.print("Input phone number: ");
-			try {
-				phone = Integer.parseInt(in.readLine());
-				//check for validity all numbers 10 digits or more
-				break;
-			}catch (Exception e) {
-				System.out.println("Your input is invalid!");
-				continue;
-			}//end try
-		}while (true);
+		phone = getInt("input phone number: ");
 		
 		try {
 			//idk how to do this part
@@ -378,33 +370,10 @@ public class Ticketmaster{
 	
 	public static void AddBooking(Ticketmaster esql){//2
 		String status;
-		// returns only if a correct value is given.
-		do {
-			System.out.print("Input status: ");
-			try {
-				status = Integer.parseInt(in.readLine());
-				//check for validity status
-				break;
-			}catch (Exception e) {
-				System.out.println("Your input is invalid!");
-				continue;
-			}//end try
-		}while (true);
+		status = getString("Input status: ");
 		
 		String dateTime;
-		// returns only if a correct value is given.
-		do {
-			System.out.print("Input booking date and time (YYY-MM-DD hh:mm): ");
-			try {
-				//not too sure how to do this???
-				dateTime = Integer.parseInt(in.readLine());
-				//check for validity
-				break;
-			}catch (Exception e) {
-				System.out.println("Your input is invalid!");
-				continue;
-			}//end try
-		}while (true);
+		dateTime = getString("Input booking date and time (YYY-MM-DD hh:mm): ");
 		
 		
 		//then update query...???
@@ -414,48 +383,13 @@ public class Ticketmaster{
 	
 	public static void AddMovieShowingToTheater(Ticketmaster esql){//3
 		String title;
-		// returns only if a correct value is given.
-		do {
-			System.out.print("Input title of movie: ");
-			try {
-				title = Integer.parseInt(in.readLine());
-				//check for validity
-				break;
-			}catch (Exception e) {
-				System.out.println("Your input is invalid!");
-				continue;
-			}//end try
-		}while (true);
+		title = getString("Input title of movie: ");
 		
 		int duration;
-		// returns only if a correct value is given.
-		do {
-			System.out.print("Input duration of movie (in seconds): ");
-			try {
-				duration = Integer.parseInt(in.readLine());
-				//check for validity
-				break;
-			}catch (Exception e) {
-				System.out.println("Your input is invalid!");
-				continue;
-			}//end try
-		}while (true);
-		
+		duration = getInt("Input duration of movie (in seconds): ");
 		
 		int startTime;
-		// returns only if a correct value is given.
-		do {
-			//idk what TIME type is in sql...???
-			System.out.print("Input startTime of movie (TIME): ");
-			try {
-				startTime = Integer.parseInt(in.readLine());
-				//startTime for validity
-				break;
-			}catch (Exception e) {
-				System.out.println("Your input is invalid!");
-				continue;
-			}//end try
-		}while (true);
+		startTime = getInt("Input startTime of movie (TIME): ");
 		
 		
 		//then update query...???
