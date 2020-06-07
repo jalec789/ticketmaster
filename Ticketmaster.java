@@ -24,6 +24,12 @@ import java.io.InputStreamReader;
 import java.util.List;
 import java.util.ArrayList;
 
+//To hash passwords
+import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 /**
  * This class defines a simple embedded SQL utility class that is designed to
  * work with PostgreSQL JDBC drivers.
@@ -31,6 +37,45 @@ import java.util.ArrayList;
  */
 
 public class Ticketmaster{
+
+	public static byte[] getSHA(String input) throws NoSuchAlgorithmException
+	{
+		// Static getInstance method is called with hashing SHA
+		MessageDigest md = MessageDigest.getInstance("SHA-256");
+
+		// digest() method called
+		// to calculate message digest of an input
+		// and return array of byte
+		return md.digest(input.getBytes(StandardCharsets.UTF_8));
+	}
+
+	public static String toHexString(byte[] hash)
+	{
+		// Convert byte array into signum representation
+		BigInteger number = new BigInteger(1, hash);
+
+		// Convert message digest into hex value
+		StringBuilder hexString = new StringBuilder(number.toString(16));
+
+		// Pad with leading zeros
+		while (hexString.length() < 32)
+		{
+			hexString.insert(0, '0');
+		}
+
+		return hexString.toString();
+	}
+
+	public static String hashPassword(String password) {
+		String hash = "SHA256";
+		try {
+			hash = toHexString(getSHA(password));
+		} catch (NoSuchAlgorithmException e) {
+			System.out.println("Exception thrown for incorrect algorithm: " + e);
+		}
+		return hash;
+	}
+
 	//reference to physical database connection
 	private Connection _connection = null;
 	static BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
@@ -358,11 +403,17 @@ public class Ticketmaster{
 
 		int phone;
 		phone = getInt("input phone number: ");
-		
+
+		String password;
+		password = getString("Input password: ");
+		password = hashPassword(password);
+
+		String query;
 		try {
 			//idk how to do this part
-			String query = "INSERT INTO Users (fname, lname, email, phone) VALUES (" + firstname + ", '" + lastname + "', '" + email + "', " + phone + ");";
+			query = String.format("INSERT INTO Users (fname, lname, email, phone, pwd) VALUES ('%s' , '%s' , '%s' , %d , '%s')");
 			esql.executeUpdate(query);
+			//System.out.println(query);	//DEBUG
 		} catch (Exception e) {
 			//some error message idk
 		}
