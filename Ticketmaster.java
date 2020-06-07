@@ -360,7 +360,7 @@ public class Ticketmaster{
 	public static String getString(String prompt) {
 		String input;
 		do {
-			System.out.println(prompt);
+			System.out.print(prompt);
 			try {
 				input = in.readLine();
 				//if statement here if needed...
@@ -407,9 +407,9 @@ public class Ticketmaster{
 		String password;
 		password = getString("Input password: ");
 		password = hashPassword(password);
-		System.out.println("Hash is " + password);
-		String query = String.format("INSERT INTO Users (fname, lname, email, phone, pwd) VALUES ('%s' , '%s' , '%s' , %d , '%s')", firstname, lastname, email, phone, password);
-		System.out.println("query string: " + query);
+		//System.out.println("Hash is " + password);
+		String query = String.format("INSERT INTO Users (fname, lname, email, phone, pwd) VALUES ('%s' , '%s' , '%s' , %d , '%s');", firstname, lastname, email, phone, password);
+		//System.out.println("query string: " + query);		//DEBUG
 		try {
 			esql.executeUpdate(query);
 		} catch (Exception e) {
