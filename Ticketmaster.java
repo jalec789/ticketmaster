@@ -446,7 +446,7 @@ public class Ticketmaster{
 		//System.out.println("query string: " + query);		//DEBUG
 		try {
 			esql.executeUpdate(query);
-		} catch (Exception e) {
+		} catch (Exception a) {
 			System.out.println("Did not update DB");
 		}
 	}
@@ -463,11 +463,19 @@ public class Ticketmaster{
 		String queryCheck = String.format("SELECT * FROM Movies WHERE mvid=%d;", movieId);
 
 		//check if movie ID exists
-		int duration;	//I moved this out here simply to let the endTime prompt access this value
+
+
+//		if(esql.executeQuery(queryCheck) >= 1) {
+//			System.out.println("Movie ID exists!!!");
+//		}
 		try{
-			esql.executeQuery(queryCheck); //if >= 1 then we should
-			System.out.println("Movie ID exists!!!");
+			int i =	esql.executeQuery(queryCheck); //if >= 1 then we should
+			if(i == 0) {
+				throw new Exception("Movie not found");
+			}
+			System.out.println("Movie ID exists!!! i = " + i);
 		} catch (Exception e) {
+//		else {
 			System.out.println("Movie ID does not exist so a new movie will be added");
 
 			String title;
@@ -482,6 +490,7 @@ public class Ticketmaster{
 			String description;
 			description = getString("Input description of the movie: ");
 
+			int duration;
 			duration = getInt("Input duration of movie (in seconds): ");
 
 			String language;
@@ -495,7 +504,7 @@ public class Ticketmaster{
 
 			try {
 				esql.executeUpdate(movieQuery);
-			} catch (Exception e) {
+			} catch (Exception a) {
 				System.out.println("Did not update DB");		//idk why it wouldnt add the movie if the pk was prespecified
 			}
 		}
@@ -512,7 +521,7 @@ public class Ticketmaster{
 		startTime = getString("Input the start time: ");
 
 		String endTime;
-		endTime = getString(String.format("Input the end time (duration of movie is %d seconds)", endTime));
+		endTime = getString("Input the end time: ");
 
 		String query;
 		query = String.format("INSERT INTO Shows (sid, mvid, sdate, sttime, edtime) VALUES (%d, %d, '%s', '%s', '%s');", showId, movieId, showDate, startTime, endTime);
