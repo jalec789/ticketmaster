@@ -450,7 +450,7 @@ public class Ticketmaster{
 			System.out.println("Did not update DB");
 		}
 	}
-	
+
 	public static void AddMovieShowingToTheater(Ticketmaster esql){//3
 		//since movie PK=mvid and show FK=mvid we want to
 		//add movie first then add the show
@@ -546,19 +546,20 @@ public class Ticketmaster{
 
 		//we need to select seats where
 		//to do this we need to
-		//retrive booking id, i think they seem to be empty in the given data set
+		//retrive booking id executeQueryAndReturnResult(), i think they seem to be empty in the given data set
 		//then we change the cinema seat id or show seat ID???
+		//BUT also check if the sum of seats are the same price... idk how to retrive a single cell???
 		//query: UPDATE csid FROM ShowSeats WHERE bid='bid';
 
 		//The problem with this is that the data that holds ShowSeats has an empty bid column
 
-		String query;
-		query = String.format("");
-		try {
-			esql.executeUpdate(query);
-		} catch (Exception e) {
-			System.out.println("Did not update DB");
-		}
+//		String query;
+//		query = String.format("");
+//		try {
+//			esql.executeUpdate(query);
+//		} catch (Exception e) {
+//			System.out.println("Did not update DB");
+//		}
 	}
 
 	// STILL NEEDS ATTENTION ---------------------------------------------------------
@@ -586,23 +587,71 @@ public class Ticketmaster{
 			System.out.println("Did not update DB");
 		}
 	}
-	
+
+	// STILL NEEDS ATTENTION ---------------------------------------------------------
 	public static void RemoveShowsOnDate(Ticketmaster esql){//8
-		
+		//Maybe we should unlink the seats. like if status is now cancelled maybe we should get those bid and update the ShowSeats table???
+
+		String date;
+		date = getString("Input date to remove all shows: ");
+
+
+		//select * from bookings where sid in (select sid from shows where sdate = '2/2/2019');
+		//^this doesnt work since sid is not unique :(
+		//this works though:
+		//select * from bookings where bdatetime > '2019-02-02 00:00:00-08' AND bdatetime < '2019-02-02 23:59:59-08';
+		//this format also works (somehow it translates in sql)
+		//select * from bookings where bdatetime > '2/2/2019 00:00:00-08' AND bdatetime < '2/2/2019 23:59:59-08';
+		String query;
+		query = String.format("UPDATE Bookings SET status = 'cancelled' WHERE bdatetime > '%s 00:00:00' AND bdatetime < '%s 23:59:59';", date);
+		try {
+			esql.executeUpdate(query);
+		} catch (Exception e) {
+			System.out.println("Did not update DB");
+		}
 	}
-	
+
+	//given a show sid???
 	public static void ListTheatersPlayingShow(Ticketmaster esql){//9
 		//
+		//executeQueryAndPrintResult()
+		//since show to cinema theater is many to many with show we have to wrap around using show seating to connect show id with theater id
+		int showId;
+		showId = getInt("Input the show ID: ");
+
+		//SELECT * FROM Theaters WHERE tid IN (SELECT tid FROM CinemaSeats WHERE csid IN (SELECT csid FROM ShowSeats WHERE sid = 1));
+
+		String query;
+		query = String.format("SELECT * FROM Theaters WHERE tid IN (SELECT tid FROM CinemaSeats WHERE csid IN (SELECT csid FROM ShowSeats WHERE sid = %d));", showId);
+		try {
+			esql.executeQueryAndPrintResult(query);
+		} catch (Exception e) {
+			System.out.println("Did not update DB");
+		}
 	}
-	
+
+	//it just says list all shows not movie titles
 	public static void ListShowsStartingOnTimeAndDate(Ticketmaster esql){//10
 		//
-		
+		String date;
+		//will also accept specific second lol (YYYY-MM-DD HH:MM:SS)
+		date = getString("Input date (YYYY-MM-DD): ");
+
+		String time;
+		time = getString("Input a time in 24hr format (HH:MM): ");
+
+		String query;
+		query = String.format("SELECT * FROM Shows WHERE sdate = '%s' AND sttime = '%s';", date, time);
+		try {
+			esql.executeQueryAndPrintResult(query);
+		} catch (Exception e) {
+			System.out.println("Did not update DB");
+		}
 	}
 
 	public static void ListMovieTitlesContainingLoveReleasedAfter2010(Ticketmaster esql){//11
 		//
-		
+
 	}
 
 	public static void ListUsersWithPendingBooking(Ticketmaster esql){//12
