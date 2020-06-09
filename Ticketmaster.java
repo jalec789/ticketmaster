@@ -428,6 +428,7 @@ public class Ticketmaster{
 		status = getString("Input status: ");
 		
 		String dateTime;
+		//maybe separate these two?
 		dateTime = getString("Input booking date and time (M/D/YYYY hh:mm): ");
 
 		int numSeats;
@@ -437,6 +438,7 @@ public class Ticketmaster{
 		showId = getInt("Input show ID: ");
 
 		String email;
+		//if an email is non-existant the database will not update
 		email = getString("Input email: ");
 
 		String query = String.format("INSERT INTO Bookings (bid, status, bdatetime, seats, sid, email) VALUES (%d, '%s', '%s', %d, %d, '%s');", bookingId, status, dateTime, numSeats, showId, email);
@@ -449,16 +451,35 @@ public class Ticketmaster{
 	}
 	
 	public static void AddMovieShowingToTheater(Ticketmaster esql){//3
+
+		//Add movie first then add the show
+		
+		int movieId;
+		movieId = getInt("Input the movie ID: ");
+
+		String queryCheck = String.format("SELECT * FROM Movies WHERE mvid=%d;", movieId);
+
+		try{
+			if(esql.executeQuery(queryCheck) >= 1) {
+				System.out.println("Movie selected exists");
+			}
+			else {
+				//throw...?
+			}
+		} catch (Exception e) {
+			
+		}
+
 		String title;
 		title = getString("Input title of movie: ");
 		
 		int duration;
 		duration = getInt("Input duration of movie (in seconds): ");
 		
-		int startTime;
+		String startTime;
 		startTime = getString("Input startTime of movie (in 24 hr format hh:mm): ");
 		
-		//then update query...???
+		
 		
 	}
 	
