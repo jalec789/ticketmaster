@@ -408,6 +408,7 @@ public class Ticketmaster{
 		password = getString("Input password: ");
 		password = hashPassword(password);
 		//System.out.println("Hash is " + password);
+
 		String query = String.format("INSERT INTO Users (fname, lname, email, phone, pwd) VALUES ('%s' , '%s' , '%s' , %d , '%s');", firstname, lastname, email, phone, password);
 		//System.out.println("query string: " + query);		//DEBUG
 		try {
@@ -419,16 +420,32 @@ public class Ticketmaster{
 	}
 	
 	public static void AddBooking(Ticketmaster esql){//2
+		int bookingId;
+		//Should this follow the sequence using function getCurrSeqVal()???
+		bookingId = getInt("Input booking ID: ");
+
 		String status;
 		status = getString("Input status: ");
 		
 		String dateTime;
-		dateTime = getString("Input booking date and time (YYY-MM-DD hh:mm): ");
-		
-		
-		//then update query...???
-		
-		
+		dateTime = getString("Input booking date and time (M/D/YYYY hh:mm): ");
+
+		int numSeats;
+		numSeats = getInt("Input number of seats booked: ");
+
+		int showId;
+		showId = getInt("Input show ID: ");
+
+		String email;
+		email = getString("Input email: ");
+
+		String query = String.format("INSERT INTO Bookings (bid, status, bdatetime, seats, sid, email) VALUES (%d, '%s', '%s', %d, %d, '%s');", bookingId, status, dateTime, numSeats, showId, email);
+		//System.out.println("query string: " + query);		//DEBUG
+		try {
+			esql.executeUpdate(query);
+		} catch (Exception e) {
+			System.out.println("Did not update DB");
+		}
 	}
 	
 	public static void AddMovieShowingToTheater(Ticketmaster esql){//3
@@ -439,11 +456,9 @@ public class Ticketmaster{
 		duration = getInt("Input duration of movie (in seconds): ");
 		
 		int startTime;
-		startTime = getInt("Input startTime of movie (TIME): ");
-		
+		startTime = getString("Input startTime of movie (in 24 hr format hh:mm): ");
 		
 		//then update query...???
-		
 		
 	}
 	
