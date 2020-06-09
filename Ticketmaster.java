@@ -407,9 +407,9 @@ public class Ticketmaster{
 		String password;
 		password = getString("Input password: ");
 		password = hashPassword(password);
-		//System.out.println("Hash is " + password);
+		//System.out.println("Hash is " + password);		//DEBUG
 
-		String query = String.format("INSERT INTO Users (fname, lname, email, phone, pwd) VALUES ('%s' , '%s' , '%s' , %d , '%s');", firstname, lastname, email, phone, password);
+		String query = String.format("INSERT INTO Users (fname, lname, email, phone, pwd) VALUES ('%s', '%s', '%s', %d, '%s');", firstname, lastname, email, phone, password);
 		//System.out.println("query string: " + query);		//DEBUG
 		try {
 			esql.executeUpdate(query);
@@ -423,6 +423,7 @@ public class Ticketmaster{
 		int bookingId;
 		//Should this follow the sequence using function getCurrSeqVal()???
 		bookingId = getInt("Input booking ID: ");
+		//or we could check to see if the id already exists???
 
 		String status;
 		status = getString("Input status: ");
@@ -452,35 +453,75 @@ public class Ticketmaster{
 	
 	public static void AddMovieShowingToTheater(Ticketmaster esql){//3
 
-		//Add movie first then add the show
+		//since movie PK=mvid and show FK=mvid we want to
+		//add movie first then add the show
 		
 		int movieId;
 		movieId = getInt("Input the movie ID: ");
 
+		//check if movie ID exists
 		String queryCheck = String.format("SELECT * FROM Movies WHERE mvid=%d;", movieId);
 
+		//check if movie ID exists
+		int duration;	//I moved this out here simply to let the endTime prompt access this value
 		try{
-			if(esql.executeQuery(queryCheck) >= 1) {
-				System.out.println("Movie selected exists");
-			}
-			else {
-				//throw...?
-			}
+			esql.executeQuery(queryCheck); //if >= 1 then we should
+			System.out.println("Movie ID exists!!!");
 		} catch (Exception e) {
-			
+			System.out.println("Movie ID does not exist so a new movie will be added");
+
+			String title;
+			title = getString("Input title of movie: ");
+
+			String releaseDate;
+			releaseDate = getString("Input the release date (M/D/YYYY): ");
+
+			String country;
+			country = getString("Input release country: ");
+
+			String description;
+			description = getString("Input description of the movie: ");
+
+			duration = getInt("Input duration of movie (in seconds): ");
+
+			String language;
+			language = getString("Input language of movie: ");
+
+			String genre;
+			genre = getString("Input genre of movie: ");
+
+			String movieQuery;
+			movieQuery = String.format("INSERT INTO Movies (mvid, title, rdate, country, description, duration, lang, genre) VALUES (%d, '%s', '%s', '%s', '%s', %d, '%s', '%s');", movieId, title, releaseDate, country, description, duration, language, genre);
+
+			try {
+				esql.executeUpdate(movieQuery);
+			} catch (Exception e) {
+				System.out.println("Did not update DB");		//idk why it wouldnt add the movie if the pk was prespecified
+			}
 		}
 
-		String title;
-		title = getString("Input title of movie: ");
-		
-		int duration;
-		duration = getInt("Input duration of movie (in seconds): ");
-		
+		//now we can add the show to theater
+		int showId;
+		showId = getInt("Input show ID: ");
+		//should we make sure the id is non existant???
+
+		String showDate;
+		showDate = getString("Input the show date: ");
+
 		String startTime;
-		startTime = getString("Input startTime of movie (in 24 hr format hh:mm): ");
-		
-		
-		
+		startTime = getString("Input the start time: ");
+
+		String endTime;
+		endTime = getString(String.format("Input the end time (duration of movie is %d seconds)", endTime));
+
+		String query;
+		query = String.format("INSERT INTO Shows (sid, mvid, sdate, sttime, edtime) VALUES (%d, %d, '%s', '%s', '%s');", showId, movieId, showDate, startTime, endTime);
+
+		try {
+			esql.executeUpdate(query);
+		} catch (Exception e) {
+			System.out.println("Did not update DB");
+		}
 	}
 	
 	public static void CancelPendingBookings(Ticketmaster esql){//4
