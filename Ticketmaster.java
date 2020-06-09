@@ -373,7 +373,7 @@ public class Ticketmaster{
 		return input;
 	}
 
-	//idk what kind of ranges we should have
+	//idk what kind of ranges we should have???
 	public static int getInt(String prompt){
 		int input;
 		do {
@@ -611,7 +611,7 @@ public class Ticketmaster{
 		}
 	}
 
-	//given a show sid???
+	//given a show sid???	--test successful
 	public static void ListTheatersPlayingShow(Ticketmaster esql){//9
 		//
 		//executeQueryAndPrintResult()
@@ -630,7 +630,7 @@ public class Ticketmaster{
 		}
 	}
 
-	//it just says list all shows not movie titles
+	//it just says list all shows not movie titles		---test successful
 	public static void ListShowsStartingOnTimeAndDate(Ticketmaster esql){//10
 		//
 		String date;
@@ -652,11 +652,27 @@ public class Ticketmaster{
 	public static void ListMovieTitlesContainingLoveReleasedAfter2010(Ticketmaster esql){//11
 		//
 
+		//select * from movies where (title like '%Love%') AND rdate > '2010-12-31'; non-inclusive 2010
+		String query;
+		query = String.format("SELECT title FROM Movies WHERE (title LIKE '%Love%') AND rdate > '2010-12-31';");
+		try {
+			esql.executeQueryAndPrintResult(query);
+		} catch (Exception e) {
+			System.out.println("Did not update DB");
+		}
 	}
 
 	public static void ListUsersWithPendingBooking(Ticketmaster esql){//12
 		//
-		
+
+		//SELECT fname, lname, email FROM Users WHERE email IN (SELECT email FROM Bookings WHERE status = 'Paid');
+		String query;
+		query = String.format("SELECT fname, lname, email FROM Users WHERE email IN (SELECT email FROM Bookings WHERE status = 'Paid');");
+		try {
+			esql.executeQueryAndPrintResult(query);
+		} catch (Exception e) {
+			System.out.println("Did not update DB");
+		}
 	}
 
 	public static void ListMovieAndShowInfoAtCinemaInDateRange(Ticketmaster esql){//13
