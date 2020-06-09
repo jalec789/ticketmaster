@@ -452,7 +452,6 @@ public class Ticketmaster{
 	}
 	
 	public static void AddMovieShowingToTheater(Ticketmaster esql){//3
-
 		//since movie PK=mvid and show FK=mvid we want to
 		//add movie first then add the show
 		
@@ -463,19 +462,13 @@ public class Ticketmaster{
 		String queryCheck = String.format("SELECT * FROM Movies WHERE mvid=%d;", movieId);
 
 		//check if movie ID exists
-
-
-//		if(esql.executeQuery(queryCheck) >= 1) {
-//			System.out.println("Movie ID exists!!!");
-//		}
 		try{
 			int i =	esql.executeQuery(queryCheck); //if >= 1 then we should
 			if(i == 0) {
 				throw new Exception("Movie not found");
 			}
-			System.out.println("Movie ID exists!!! i = " + i);
+			System.out.println("Movie ID exists!!!");
 		} catch (Exception e) {
-//		else {
 			System.out.println("Movie ID does not exist so a new movie will be added");
 
 			String title;
@@ -532,21 +525,66 @@ public class Ticketmaster{
 			System.out.println("Did not update DB");
 		}
 	}
-	
+
+	// STILL NEEDS ATTENTION ---------------------------------------------------------
 	public static void CancelPendingBookings(Ticketmaster esql){//4
-		
+
+		//Maybe we should unlink the seats. like if status is now cancelled maybe we should get those bid and update the ShowSeats table???
+
+		String query;
+		query = String.format("UPDATE Bookings SET status = 'cancelled' WHERE status = 'pending';");
+		try {
+			esql.executeUpdate(query);
+		} catch (Exception e) {
+			System.out.println("Did not update DB");
+		}
 	}
-	
+
+
+	// STILL NEEDS ATTENTION ---------------------------------------------------------
 	public static void ChangeSeatsForBooking(Ticketmaster esql) throws Exception{//5
-		
+
+		//we need to select seats where
+		//to do this we need to
+		//retrive booking id, i think they seem to be empty in the given data set
+		//then we change the cinema seat id or show seat ID???
+		//query: UPDATE csid FROM ShowSeats WHERE bid='bid';
+
+		//The problem with this is that the data that holds ShowSeats has an empty bid column
+
+		String query;
+		query = String.format("");
+		try {
+			esql.executeUpdate(query);
+		} catch (Exception e) {
+			System.out.println("Did not update DB");
+		}
 	}
-	
+
+	// STILL NEEDS ATTENTION ---------------------------------------------------------
 	public static void RemovePayment(Ticketmaster esql){//6
-		
+		//Maybe we should unlink the seats. like if status is now cancelled maybe we should get those bid and update the ShowSeats table???
+
+		int bookingId;
+		bookingId = getInt("Input booking ID to be cancelled: ");
+
+		String query;
+		query = String.format("UPDATE Bookings SET status = 'cancelled' WHERE bid = %d;", bookingId);
+		try {
+			esql.executeUpdate(query);
+		} catch (Exception e) {
+			System.out.println("Did not update DB");
+		}
 	}
 	
 	public static void ClearCancelledBookings(Ticketmaster esql){//7
-		
+		String query;
+		query = String.format("DELETE FROM Bookings WHERE status = 'cancelled';");
+		try {
+			esql.executeUpdate(query);
+		} catch (Exception e) {
+			System.out.println("Did not update DB");
+		}
 	}
 	
 	public static void RemoveShowsOnDate(Ticketmaster esql){//8
@@ -555,7 +593,6 @@ public class Ticketmaster{
 	
 	public static void ListTheatersPlayingShow(Ticketmaster esql){//9
 		//
-		
 	}
 	
 	public static void ListShowsStartingOnTimeAndDate(Ticketmaster esql){//10
