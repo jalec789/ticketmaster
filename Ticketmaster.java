@@ -696,17 +696,15 @@ public class Ticketmaster{
 
 	public static void ListBookingInfoForUser(Ticketmaster esql){//14
 		// vars
-		String firstname;
-		String lastname;
+		String emailaddress;
 		
 		//get names
-		firstname = getString("Input first name: ");
-		lastname = getString("Input last name: ");
+		emailaddress = getString("Input email address: ");
 		
 		String query;
 		
 		// display all specicfied users info
-		query = String.format("SELECT * FROM Users WHERE fname = '%s' AND lname = '%s';", firstname, lastname);
+		query = String.format("SELECT * FROM Users WHERE email = '%s, emailaddress);
 		try {
 			esql.executeQueryAndPrintResult(query);
 		} catch (Exception e) {
