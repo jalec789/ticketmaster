@@ -675,13 +675,43 @@ public class Ticketmaster{
 		}
 	}
 
+	//not tested
 	public static void ListMovieAndShowInfoAtCinemaInDateRange(Ticketmaster esql){//13
-		//
 		
+		String date1; // lower bound
+		String date2; // upper bound
+		date1 = getString("Input date (YYYY-MM-DD): ");
+		date2 = getString("Input date (YYYY-MM-DD): ");
+		
+		String query;
+		
+		// do we need to select from movie as well?
+		query = String.format("SELECT * FROM Shows WHERE sdate > '%s' AND sdate < '%s';", date1, date2);
+		try {
+			esql.executeQueryAndPrintResult(query);
+		} catch (Exception e) {
+			System.out.println("Did not update DB");
+		}
 	}
 
 	public static void ListBookingInfoForUser(Ticketmaster esql){//14
-		//
+		// vars
+		String firstname;
+		String lastname;
+		
+		//get names
+		firstname = getString("Input first name: ");
+		lastname = getString("Input last name: ");
+		
+		String query;
+		
+		// display all specicfied users info
+		query = String.format("SELECT * FROM Users WHERE fname = '%s' AND lname = '%s';", firstname, lastname);
+		try {
+			esql.executeQueryAndPrintResult(query);
+		} catch (Exception e) {
+			System.out.println("Did not update DB");
+		}
 		
 	}
 	
