@@ -661,7 +661,7 @@ public class Ticketmaster{
 			System.out.println("Did not update DB");
 		}
 	}
-
+	
 	public static void ListUsersWithPendingBooking(Ticketmaster esql){//12
 		//
 
@@ -694,6 +694,7 @@ public class Ticketmaster{
 		}
 	}
 
+	//not tested
 	public static void ListBookingInfoForUser(Ticketmaster esql){//14
 		// vars
 		String emailaddress;
@@ -704,7 +705,7 @@ public class Ticketmaster{
 		String query;
 		
 		// display all specicfied users info
-		query = String.format("SELECT title, duration, sdate, sttime, tname, csid FROM Bookings INNER JOIN Shows ON Bookings.sid=Shows.sid INNER JOIN Movies ON Shows.mvid=Movies.mvid INNER JOIN ShowSeats ON Bookings.sid=ShowSeats.sid INNER JOIN Plays ON Bookings.sid=Plays.sid INNER JOIN Theaters ON Plays.tid=Theaters.tid WHERE bookings.email = '%s';");
+		query = String.format("SELECT title AS \"Movie Title\", sdate AS \"Show Date\", sttime AS \"Start Time\", tname AS \"Theater Name\", csid \"Cinema Seat Number\" FROM Bookings INNER JOIN Shows ON Bookings.sid=Shows.sid INNER JOIN Movies ON Shows.mvid=Movies.mvid INNER JOIN ShowSeats ON Bookings.sid=ShowSeats.sid INNER JOIN Plays ON Bookings.sid=Plays.sid INNER JOIN Theaters ON Plays.tid=Theaters.tid WHERE bookings.email = '%s';");
 		try {
 			esql.executeQueryAndPrintResult(query);
 		} catch (Exception e) {
