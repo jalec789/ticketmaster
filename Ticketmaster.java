@@ -699,12 +699,12 @@ public class Ticketmaster{
 		String emailaddress;
 		
 		//get names
-		emailaddress = getString("Input email address: ");
+		emailaddress = getString("Input user's email address: ");
 		
 		String query;
 		
 		// display all specicfied users info
-		query = String.format("SELECT * FROM Users WHERE email = '%s, emailaddress);
+		query = String.format("SELECT title, duration, sdate, sttime, tname, csid FROM Bookings INNER JOIN Shows ON Bookings.sid=Shows.sid INNER JOIN Movies ON Shows.mvid=Movies.mvid INNER JOIN ShowSeats ON Bookings.sid=ShowSeats.sid INNER JOIN Plays ON Bookings.sid=Plays.sid INNER JOIN Theaters ON Plays.tid=Theaters.tid WHERE bookings.email = '%s';");
 		try {
 			esql.executeQueryAndPrintResult(query);
 		} catch (Exception e) {
