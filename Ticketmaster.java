@@ -229,7 +229,12 @@ public class Ticketmaster{
 	 * @return current value of a sequence
 	 * @throws java.sql.SQLException when failed to execute the query
 	 */
-	
+
+	//Says we dont need it but here is kinda how you use it i think
+	//Select * from information_schema.sequences;
+	//select * from pg_sequences;
+	//CREATE SEQUENCE 'serial' START 101;
+	//select currval('serial');
 	public int getCurrSeqVal(String sequence) throws SQLException {
 		Statement stmt = this._connection.createStatement ();
 		
@@ -548,11 +553,25 @@ public class Ticketmaster{
 		//we need to select seats where
 		//to do this we need to
 		//retrive booking id executeQueryAndReturnResult(), i think they seem to be empty in the given data set
+		String bookingId;
+		bookingId = getString("Enter your booking ID: ");
+//		try {
+//			esql.executeUpdate(query);
+//		} catch (Exception e) {
+//			System.out.println("Did not update DB");
+//		}
+
+
+
 		//then we change the cinema seat id or show seat ID???
 		//BUT also check if the sum of seats are the same price... idk how to retrive a single cell???
 		//query: UPDATE csid FROM ShowSeats WHERE bid='bid';
 
 		//The problem with this is that the data that holds ShowSeats has an empty bid column
+
+		//There were a lot of problems with understanding this method. We tried to interpret it the best we could
+
+
 
 //		String query;
 //		query = String.format("");
@@ -589,13 +608,15 @@ public class Ticketmaster{
 		}
 	}
 
-	// STILL NEEDS ATTENTION ---------------------------------------------------------
+	//needs testing
 	public static void RemoveShowsOnDate(Ticketmaster esql){//8
 		//Maybe we should unlink the seats. like if status is now cancelled maybe we should get those bid and update the ShowSeats table???
 
 		String date;
 		date = getString("Input date to remove all shows: ");
 
+		String cinemaName;
+		cinemaName = getString("Enter the cinema name closing: ");
 
 		//select * from bookings where sid in (select sid from shows where sdate = '2/2/2019');
 		//^this doesnt work since sid is not unique :(
@@ -603,8 +624,14 @@ public class Ticketmaster{
 		//select * from bookings where bdatetime > '2019-02-02 00:00:00-08' AND bdatetime < '2019-02-02 23:59:59-08';
 		//this format also works (somehow it translates in sql)
 		//select * from bookings where bdatetime > '2/2/2019 00:00:00-08' AND bdatetime < '2/2/2019 23:59:59-08';
+
+
+		//SELECT status FROM Cinemas INNER JOIN Theaters ON Theaters.cid = Cinemas.cid INNER JOIN Plays ON Plays.tid = Theaters.tid INNER JOIN Shows ON Shows.sid = Plays.sid INNER JOIN Bookings ON Bookings.sid = Shows.sid WHERE cname = 'AMC' AND sdate = '2019-02-07';
+		//^this does not work
+
+		//I think this finally works, had to do it without JOIN
 		String query;
-		query = String.format("UPDATE Bookings SET status = 'cancelled' WHERE bdatetime > '%s 00:00:00' AND bdatetime < '%s 23:59:59';", date);
+		query = String.format("UPDATE Bookings SET status = 'cancelled' where sid IN (select sid from shows where sdate='%s' AND sid IN (select sid from plays where tid IN (select tid from theaters where cid IN (select cid from cinemas where cname = '%s'))));", date, cinemaName);
 		try {
 			esql.executeUpdate(query);
 		} catch (Exception e) {
@@ -633,7 +660,6 @@ public class Ticketmaster{
 
 	//test successful
 	public static void ListShowsStartingOnTimeAndDate(Ticketmaster esql){//10
-		//
 		String date;
 		//will also accept specific second lol (YYYY-MM-DD HH:MM:SS)
 		date = getString("Input date (YYYY-MM-DD): ");
@@ -652,7 +678,6 @@ public class Ticketmaster{
 
 	//test successful
 	public static void ListMovieTitlesContainingLoveReleasedAfter2010(Ticketmaster esql){//11
-		//
 
 		//select * from movies where (title like '%Love%') AND rdate > '2010-12-31'; non-inclusive 2010
 		String query;
@@ -666,7 +691,6 @@ public class Ticketmaster{
 
 	//test successful
 	public static void ListUsersWithPendingBooking(Ticketmaster esql){//12
-		//
 
 		//SELECT fname, lname, email FROM Users WHERE email IN (SELECT email FROM Bookings WHERE status = 'pending');
 		String query;
@@ -692,9 +716,6 @@ public class Ticketmaster{
 		cinemaName = getString("Input cinema name: ");
 		
 		String query;
-		
-		// do we need to select from movie as well?
-
 		//SELECT cname, title, duration, sdate, sttime FROM Theaters INNER JOIN Plays ON Plays.tid = Theaters.tid INNER JOIN Shows ON Shows.sid = Plays.sid INNER JOIN Movies ON Movies.mvid = Shows.mvid INNER JOIN  Cinemas ON Cinemas.cid = Theaters.cid WHERE title = 'Aquaman' AND cname = 'AMC' AND sdate >= '2019-02-01' AND sdate <= '2019-02-07';
 		query = String.format("SELECT cname, title, duration, sdate, sttime FROM Theaters INNER JOIN Plays ON Plays.tid = Theaters.tid INNER JOIN Shows ON Shows.sid = Plays.sid INNER JOIN Movies ON Movies.mvid = Shows.mvid INNER JOIN  Cinemas ON Cinemas.cid = Theaters.cid WHERE title = '%s' AND cname = '%s' AND sdate >= '%s' AND sdate <= '%s';", movieName, cinemaName, date1, date2);
 		try {
