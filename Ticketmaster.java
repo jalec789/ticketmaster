@@ -391,6 +391,7 @@ public class Ticketmaster{
 		return input;
 	}
 	
+	//needs testing
 	public static void AddUser(Ticketmaster esql){//1
 		String firstname;
 		firstname = getString("Input firstname: ");
@@ -418,7 +419,8 @@ public class Ticketmaster{
 			System.out.println("Did not update DB");
 		}
 	}
-	
+
+	//needs testing
 	public static void AddBooking(Ticketmaster esql){//2
 		int bookingId;
 		//Should this follow the sequence using function getCurrSeqVal()???
@@ -451,6 +453,7 @@ public class Ticketmaster{
 		}
 	}
 
+	//needs testing
 	public static void AddMovieShowingToTheater(Ticketmaster esql){//3
 		//since movie PK=mvid and show FK=mvid we want to
 		//add movie first then add the show
@@ -526,10 +529,8 @@ public class Ticketmaster{
 		}
 	}
 
-	// STILL NEEDS ATTENTION ---------------------------------------------------------
+	//needs testing... pretty sure this works
 	public static void CancelPendingBookings(Ticketmaster esql){//4
-
-		//Maybe we should unlink the seats. like if status is now cancelled maybe we should get those bid and update the ShowSeats table???
 
 		String query;
 		query = String.format("UPDATE Bookings SET status = 'cancelled' WHERE status = 'pending';");
@@ -562,9 +563,8 @@ public class Ticketmaster{
 //		}
 	}
 
-	// STILL NEEDS ATTENTION ---------------------------------------------------------
+	//needs testing
 	public static void RemovePayment(Ticketmaster esql){//6
-		//Maybe we should unlink the seats. like if status is now cancelled maybe we should get those bid and update the ShowSeats table???
 
 		int bookingId;
 		bookingId = getInt("Input booking ID to be cancelled: ");
@@ -578,6 +578,7 @@ public class Ticketmaster{
 		}
 	}
 	
+	//needs tesing
 	public static void ClearCancelledBookings(Ticketmaster esql){//7
 		String query;
 		query = String.format("DELETE FROM Bookings WHERE status = 'cancelled';");
@@ -611,7 +612,7 @@ public class Ticketmaster{
 		}
 	}
 
-	//given a show sid???	--test successful
+	//given a show sid???		test successful
 	public static void ListTheatersPlayingShow(Ticketmaster esql){//9
 		//
 		//executeQueryAndPrintResult()
@@ -630,7 +631,7 @@ public class Ticketmaster{
 		}
 	}
 
-	//it just says list all shows not movie titles		---test successful
+	//test successful
 	public static void ListShowsStartingOnTimeAndDate(Ticketmaster esql){//10
 		//
 		String date;
@@ -649,12 +650,13 @@ public class Ticketmaster{
 		}
 	}
 
+	//test successful
 	public static void ListMovieTitlesContainingLoveReleasedAfter2010(Ticketmaster esql){//11
 		//
 
 		//select * from movies where (title like '%Love%') AND rdate > '2010-12-31'; non-inclusive 2010
 		String query;
-		query = String.format("SELECT title FROM Movies WHERE (title LIKE '%Love%') AND rdate > '2010-12-31';");
+		query = "SELECT title FROM Movies WHERE (title LIKE '%Love%') AND rdate > '2010-12-31';";
 		try {
 			esql.executeQueryAndPrintResult(query);
 		} catch (Exception e) {
@@ -662,12 +664,13 @@ public class Ticketmaster{
 		}
 	}
 
+	//test successful
 	public static void ListUsersWithPendingBooking(Ticketmaster esql){//12
 		//
 
-		//SELECT fname, lname, email FROM Users WHERE email IN (SELECT email FROM Bookings WHERE status = 'Paid');
+		//SELECT fname, lname, email FROM Users WHERE email IN (SELECT email FROM Bookings WHERE status = 'pending');
 		String query;
-		query = String.format("SELECT fname, lname, email FROM Users WHERE email IN (SELECT email FROM Bookings WHERE status = 'Paid');");
+		query = String.format("SELECT fname, lname, email FROM Users WHERE email IN (SELECT email FROM Bookings WHERE status = 'pending');");
 		try {
 			esql.executeQueryAndPrintResult(query);
 		} catch (Exception e) {
@@ -675,7 +678,7 @@ public class Ticketmaster{
 		}
 	}
 
-	//not tested
+	//test successful
 	public static void ListMovieAndShowInfoAtCinemaInDateRange(Ticketmaster esql){//13
 		
 		String date1; // lower bound
@@ -701,7 +704,7 @@ public class Ticketmaster{
 		}
 	}
 
-	//not tested
+	//test successful
 	public static void ListBookingInfoForUser(Ticketmaster esql){//14
 		// vars
 		String emailaddress;
@@ -712,7 +715,7 @@ public class Ticketmaster{
 		String query;
 		
 		// display all specicfied users info
-		query = String.format("SELECT title AS \"Movie Title\", sdate AS \"Show Date\", sttime AS \"Start Time\", tname AS \"Theater Name\", csid \"Cinema Seat Number\" FROM Bookings INNER JOIN Shows ON Bookings.sid=Shows.sid INNER JOIN Movies ON Shows.mvid=Movies.mvid INNER JOIN ShowSeats ON Bookings.sid=ShowSeats.sid INNER JOIN Plays ON Bookings.sid=Plays.sid INNER JOIN Theaters ON Plays.tid=Theaters.tid WHERE bookings.email = '%s';");
+		query = String.format("SELECT title AS \"Movie Title\", sdate AS \"Show Date\", sttime AS \"Start Time\", tname AS \"Theater Name\", csid \"Cinema Seat Number\" FROM Bookings INNER JOIN Shows ON Bookings.sid=Shows.sid INNER JOIN Movies ON Shows.mvid=Movies.mvid INNER JOIN ShowSeats ON Bookings.sid=ShowSeats.sid INNER JOIN Plays ON Bookings.sid=Plays.sid INNER JOIN Theaters ON Plays.tid=Theaters.tid WHERE bookings.email = '%s';", emailaddress);
 		try {
 			esql.executeQueryAndPrintResult(query);
 		} catch (Exception e) {
