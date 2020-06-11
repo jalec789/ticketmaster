@@ -661,7 +661,7 @@ public class Ticketmaster{
 			System.out.println("Did not update DB");
 		}
 	}
-	
+
 	public static void ListUsersWithPendingBooking(Ticketmaster esql){//12
 		//
 
@@ -680,13 +680,20 @@ public class Ticketmaster{
 		
 		String date1; // lower bound
 		String date2; // upper bound
-		date1 = getString("Input date (YYYY-MM-DD): ");
-		date2 = getString("Input date (YYYY-MM-DD): ");
+		String movieName;
+		String cinemaName;
+		
+		date1 = getString("Input start date (YYYY-MM-DD): ");
+		date2 = getString("Input end date (YYYY-MM-DD): ");
+		movieName = getString("Input movie name: ");
+		cinemaName = getString("Input cinema name: ");
 		
 		String query;
 		
 		// do we need to select from movie as well?
-		query = String.format("SELECT * FROM Shows WHERE sdate > '%s' AND sdate < '%s';", date1, date2);
+
+		//SELECT cname, title, duration, sdate, sttime FROM Theaters INNER JOIN Plays ON Plays.tid = Theaters.tid INNER JOIN Shows ON Shows.sid = Plays.sid INNER JOIN Movies ON Movies.mvid = Shows.mvid INNER JOIN  Cinemas ON Cinemas.cid = Theaters.cid WHERE title = 'Aquaman' AND cname = 'AMC' AND sdate >= '2019-02-01' AND sdate <= '2019-02-07';
+		query = String.format("SELECT cname, title, duration, sdate, sttime FROM Theaters INNER JOIN Plays ON Plays.tid = Theaters.tid INNER JOIN Shows ON Shows.sid = Plays.sid INNER JOIN Movies ON Movies.mvid = Shows.mvid INNER JOIN  Cinemas ON Cinemas.cid = Theaters.cid WHERE title = '%s' AND cname = '%s' AND sdate >= '%s' AND sdate <= '%s';", movieName, cinemaName, date1, date2);
 		try {
 			esql.executeQueryAndPrintResult(query);
 		} catch (Exception e) {
