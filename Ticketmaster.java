@@ -555,17 +555,32 @@ public class Ticketmaster{
 		//retrive booking id executeQueryAndReturnResult(), i think they seem to be empty in the given data set
 		String bookingId;
 		bookingId = getString("Enter your booking ID: ");
-		int seatCount;
+		String seatCount = "NaN";
+
+		//List<List<String>> seatCount = new ArrayList<List<String>>();
 
 		String query;
 		query = String.format("select seats from Bookings where bid = %s;", bookingId);
 		try {
-			seatCount = esql.executeQueryAndReturnResult(query);
+			seatCount = (esql.executeQueryAndReturnResult(query).get(0)).get(0);
 		} catch (Exception e) {
 			System.out.println("Did not update DB");
 		}
 
 		System.out.println("The Number of seats is: " + seatCount);
+
+		//Now somehow we need to convert seatCount from a string to a number idk how...
+		//for now I will just assume all bookings only reserved 1 seat
+
+		int COUNT = 1;
+		String seatNum;
+		for(int i = 0; i < COUNT; i++) {
+			seatNum = getString("Enter the seat you would like to reserve: ");
+			query = "";
+			//find the query change the seatid's bid if availible then do the try catch.
+			//remember if one of the functions returns 0 then it will catch, we can use this in case the seat was taken and deduct i--;
+			//...???
+		}
 
 		//then we change the cinema seat id or show seat ID???
 		//BUT also check if the sum of seats are the same price... idk how to retrive a single cell???
