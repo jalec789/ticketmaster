@@ -413,14 +413,12 @@ public class Ticketmaster{
 		String password;
 		password = getString("Input password: ");
 		password = hashPassword(password);
-		//System.out.println("Hash is " + password);		//DEBUG
 
 		String query = String.format("INSERT INTO Users (fname, lname, email, phone, pwd) VALUES ('%s', '%s', '%s', %d, '%s');", firstname, lastname, email, phone, password);
-		//System.out.println("query string: " + query);		//DEBUG
 		try {
 			esql.executeUpdate(query);
 		} catch (Exception e) {
-			//some error message idk
+			//some error message 
 			System.out.println("Did not update DB");
 		}
 	}
@@ -428,15 +426,12 @@ public class Ticketmaster{
 	//needs testing
 	public static void AddBooking(Ticketmaster esql){//2
 		int bookingId;
-		//Should this follow the sequence using function getCurrSeqVal()???
 		bookingId = getInt("Input booking ID: ");
-		//or we could check to see if the id already exists???
 
 		String status;
 		status = getString("Input status: ");
 		
 		String dateTime;
-		//maybe separate these two?
 		dateTime = getString("Input booking date and time (M/D/YYYY hh:mm): ");
 
 		int numSeats;
@@ -450,7 +445,6 @@ public class Ticketmaster{
 		email = getString("Input email: ");
 
 		String query = String.format("INSERT INTO Bookings (bid, status, bdatetime, seats, sid, email) VALUES (%d, '%s', '%s', %d, %d, '%s');", bookingId, status, dateTime, numSeats, showId, email);
-		//System.out.println("query string: " + query);		//DEBUG
 		try {
 			esql.executeUpdate(query);
 		} catch (Exception a) {
@@ -458,7 +452,6 @@ public class Ticketmaster{
 		}
 	}
 
-	//needs testing
 	public static void AddMovieShowingToTheater(Ticketmaster esql){//3
 		//since movie PK=mvid and show FK=mvid we want to
 		//add movie first then add the show
@@ -513,7 +506,6 @@ public class Ticketmaster{
 		//now we can add the show to theater
 		int showId;
 		showId = getInt("Input show ID: ");
-		//should we make sure the id is non existant???
 
 		String showDate;
 		showDate = getString("Input the show date: ");
@@ -534,7 +526,6 @@ public class Ticketmaster{
 		}
 	}
 
-	//needs testing... pretty sure this works
 	public static void CancelPendingBookings(Ticketmaster esql){//4
 
 		String query;
@@ -594,7 +585,6 @@ public class Ticketmaster{
 		}
 	}
 	
-	//needs tesing
 	public static void ClearCancelledBookings(Ticketmaster esql){//7
 		String query;
 		query = String.format("DELETE FROM Bookings WHERE status = 'cancelled';");
@@ -605,28 +595,18 @@ public class Ticketmaster{
 		}
 	}
 
-	//needs testing
 	public static void RemoveShowsOnDate(Ticketmaster esql){//8
-		//Maybe we should unlink the seats. like if status is now cancelled maybe we should get those bid and update the ShowSeats table???
 
 		String date;
 		date = getString("Input date to remove all shows: ");
 
 		String cinemaName;
 		cinemaName = getString("Enter the cinema name closing: ");
-
-		//select * from bookings where sid in (select sid from shows where sdate = '2/2/2019');
-		//^this doesnt work since sid is not unique :(
-		//this works though:
+		
 		//select * from bookings where bdatetime > '2019-02-02 00:00:00-08' AND bdatetime < '2019-02-02 23:59:59-08';
 		//this format also works (somehow it translates in sql)
 		//select * from bookings where bdatetime > '2/2/2019 00:00:00-08' AND bdatetime < '2/2/2019 23:59:59-08';
 
-
-		//SELECT status FROM Cinemas INNER JOIN Theaters ON Theaters.cid = Cinemas.cid INNER JOIN Plays ON Plays.tid = Theaters.tid INNER JOIN Shows ON Shows.sid = Plays.sid INNER JOIN Bookings ON Bookings.sid = Shows.sid WHERE cname = 'AMC' AND sdate = '2019-02-07';
-		//^this does not work
-
-		//I think this finally works, had to do it without JOIN
 		String query;
 		query = String.format("UPDATE Bookings SET status = 'cancelled' where sid IN (select sid from shows where sdate='%s' AND sid IN (select sid from plays where tid IN (select tid from theaters where cid IN (select cid from cinemas where cname = '%s'))));", date, cinemaName);
 		try {
@@ -636,9 +616,8 @@ public class Ticketmaster{
 		}
 	}
 
-	//given a show sid???		test successful
+	// test successful
 	public static void ListTheatersPlayingShow(Ticketmaster esql){//9
-		//
 		//executeQueryAndPrintResult()
 		//since show to cinema theater is many to many with show we have to wrap around using show seating to connect show id with theater id
 		int showId;
@@ -658,7 +637,7 @@ public class Ticketmaster{
 	//test successful
 	public static void ListShowsStartingOnTimeAndDate(Ticketmaster esql){//10
 		String date;
-		//will also accept specific second lol (YYYY-MM-DD HH:MM:SS)
+		//will also accept specific second  (YYYY-MM-DD HH:MM:SS)
 		date = getString("Input date (YYYY-MM-DD): ");
 
 		String time;
