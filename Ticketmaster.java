@@ -549,56 +549,34 @@ public class Ticketmaster{
 
 	// STILL NEEDS ATTENTION ---------------------------------------------------------
 	public static void ChangeSeatsForBooking(Ticketmaster esql) throws Exception{//5
-
-		//we need to select seats where
-		//to do this we need to
-		//retrive booking id executeQueryAndReturnResult(), i think they seem to be empty in the given data set
 		String bookingId;
+		String showSeatIDOriginal;
+		String showSeatIDAvailable;
+
 		bookingId = getString("Enter your booking ID: ");
-		String seatCount = "NaN";
+		showSeatIDOriginal = getInt("Enter the show seat ID that you would like to change: ");
+		showSeatIDAvailable = getInt("Enter the show seat ID that you would like to change to(make sure it is the same price): ");
 
-		//List<List<String>> seatCount = new ArrayList<List<String>>();
-
-		String query;
-		query = String.format("select seats from Bookings where bid = %s;", bookingId);
+		//first check if the seat is avaible
+		String query1;
+		String query2;
+		String query3;
+		query1 = String.format("UPDATE ShowSeats SET bid = %s WHERE ssid = %s AND bid IS NULL;", bookingId, showSeatIDAvailable);// if not found the execute should return 0
+		query2 = String.format("SELECT price FROM ShowSeats WHERE bid = %s AND ssid = %s;", bookingId, showSeatIDOriginal);		//this will be used to compare price
+		String seatPrice;
 		try {
-			seatCount = (esql.executeQueryAndReturnResult(query).get(0)).get(0);
+			int check = executeQuery(query1); //if there are 0 rows updated then throw exception
+			if(check == 0){
+				throw new Exception("Seat is not availble or not found");
+			}
+			else {
+				seatPrice = (esql.executeQueryAndReturnResult(query2).get(0)).get(0);
+				query3 = String.format("UPDATE ShowSeats SET bid = NULL WHERE ssid = %s AND bid = %s AND price = %s;", showSeatIDOriginal, bookingId, seatPrice);	//then remove the original seat
+				executeQuery(query3);
+			}
 		} catch (Exception e) {
 			System.out.println("Did not update DB");
 		}
-
-		System.out.println("The Number of seats is: " + seatCount);
-
-		//Now somehow we need to convert seatCount from a string to a number idk how...
-		//for now I will just assume all bookings only reserved 1 seat
-
-		int COUNT = 1;
-		String seatNum;
-		for(int i = 0; i < COUNT; i++) {
-			seatNum = getString("Enter the seat you would like to reserve: ");
-			query = "";
-			//find the query change the seatid's bid if availible then do the try catch.
-			//remember if one of the functions returns 0 then it will catch, we can use this in case the seat was taken and deduct i--;
-			//...???
-		}
-
-		//then we change the cinema seat id or show seat ID???
-		//BUT also check if the sum of seats are the same price... idk how to retrive a single cell???
-		//query: UPDATE csid FROM ShowSeats WHERE bid='bid';
-
-		//The problem with this is that the data that holds ShowSeats has an empty bid column
-
-		//There were a lot of problems with understanding this method. We tried to interpret it the best we could
-
-
-
-//		String query;
-//		query = String.format("");
-//		try {
-//			esql.executeUpdate(query);
-//		} catch (Exception e) {
-//			System.out.println("Did not update DB");
-//		}
 	}
 
 	//needs testing
