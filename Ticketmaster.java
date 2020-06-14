@@ -587,9 +587,12 @@ public class Ticketmaster{
 	
 	public static void ClearCancelledBookings(Ticketmaster esql){//7
 		String query;
-		query = String.format("DELETE FROM Bookings WHERE status = 'cancelled';");
+		query = String.format("DELETE FROM Payments WHERE bid IN (select bid from bookings where status = 'cancelled');");
+		String query1;
+		query1 = String.format("DELETE FROM Bookings WHERE status = 'cancelled';");
 		try {
 			esql.executeUpdate(query);
+			esql.executeUpdate(query1);
 		} catch (Exception e) {
 			System.out.println("Did not update DB");
 		}
