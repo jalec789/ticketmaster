@@ -554,8 +554,8 @@ public class Ticketmaster{
 		String showSeatIDAvailable;
 
 		bookingId = getString("Enter your booking ID: ");
-		showSeatIDOriginal = getInt("Enter the show seat ID that you would like to change: ");
-		showSeatIDAvailable = getInt("Enter the show seat ID that you would like to change to(make sure it is the same price): ");
+		showSeatIDOriginal = getString("Enter the show seat ID that you would like to change: ");
+		showSeatIDAvailable = getString("Enter the show seat ID that you would like to change to(make sure it is the same price): ");
 
 		//first check if the seat is avaible
 		String query1;
@@ -565,14 +565,14 @@ public class Ticketmaster{
 		query2 = String.format("SELECT price FROM ShowSeats WHERE bid = %s AND ssid = %s;", bookingId, showSeatIDOriginal);		//this will be used to compare price
 		String seatPrice;
 		try {
-			int check = executeQuery(query1); //if there are 0 rows updated then throw exception
+			int check = esql.executeQuery(query1); //if there are 0 rows updated then throw exception
 			if(check == 0){
 				throw new Exception("Seat is not availble or not found");
 			}
 			else {
 				seatPrice = (esql.executeQueryAndReturnResult(query2).get(0)).get(0);
 				query3 = String.format("UPDATE ShowSeats SET bid = NULL WHERE ssid = %s AND bid = %s AND price = %s;", showSeatIDOriginal, bookingId, seatPrice);	//then remove the original seat
-				executeQuery(query3);
+				esql.executeQuery(query3);
 			}
 		} catch (Exception e) {
 			System.out.println("Did not update DB");
